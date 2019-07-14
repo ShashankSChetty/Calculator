@@ -1,2 +1,2 @@
 # Calculator
-API for calculating numerical equation from a string.
+API for parsing numerical equation from a string.
