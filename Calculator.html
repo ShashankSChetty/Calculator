@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="./Calculator.js"></script>
+</head>
+<body>
+    <h2>String Calculator</h2>
+    <p>Please input an equation</p>
+    <input id="string">
+    <button type="button" onclick="myFunction()">Submit</button>
+    <p id="result"></p>
+    <script>
+        function myFunction() {
+            var input, result;
+            input = document.getElementById("string").value;
+            result = Calculate(input);
+            document.getElementById("result").innerHTML = result;
+        }
+    </script>
+</body>
+</html>
