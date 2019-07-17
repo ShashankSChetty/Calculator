@@ -53,12 +53,13 @@ function Calculate(input) {
     
     var analyseAndCalculate = function() {
         var i = 0;
-        var iPredecessorIndex = 0, iSuccessorIndex;
+        var iPredecessorIndex = null, iSuccessorIndex = null;
         var iCurrentParent = -1;
         var aExpChar = sInput.split("");
         var cCurrentOperator = 'E'; // E = Empty
         var bBracketClosed = false;
         var bOperatorFound = false;
+        var bNumberAdded = false;
         var bValid = true;
         var bIsNewBracketNegative = false;
 
@@ -72,9 +73,9 @@ function Calculate(input) {
 
         for (i = 0; i < aExpChar.length; i++) {
             //if number append
-            if (isNaN(aExpChar[i]) === false) {
+            while(isNaN(aExpChar[i]) === false) {
                 sCurrentNumberString = "" + sCurrentNumberString + aExpChar[i];
-                continue;
+                i++;
             }
             //find the trigonometric function
             if(isLetter(aExpChar[i]) === true) {
@@ -143,6 +144,18 @@ function Calculate(input) {
                     if (sCurrentNumberString !== "") {
                         oTempNumObj = new NumObj(parseFloat(sCurrentNumberString));
                         aNumObjs.push(oTempNumObj);
+                        bNumberAdded = true;
+                    }
+
+                    if (bNumberAdded && bOperatorFound) {
+                        if (!bBracketClosed)
+                                iPredecessorIndex = aNumObjs.length - 2;
+                        bBracketClosed = false;
+                        iSuccessorIndex = aNumObjs.length - 1;
+                        addToOperatorArray(cCurrentOperator, iPredecessorIndex, iSuccessorIndex, oCurrentBracket);
+                        cCurrentOperator = 'E';
+                        bOperatorFound = false;
+                        bNumberAdded = false;
                     }
 
                     oCurrentBracket = new BracketArray();
@@ -160,6 +173,7 @@ function Calculate(input) {
                     oTempNumObj.bIsBracketPointer = true;
                     if (cCurrentOperator == '-') oTempNumObj.bIsNegative = true;
                     aNumObjs.push(oTempNumObj);
+                    bNumberAdded = true;
 
                     if (i == 0) continue;
                     oParentBracket = aBracketArray[oCurrentBracket.iParentIndex];
@@ -172,6 +186,7 @@ function Calculate(input) {
                         iSuccessorIndex = aNumObjs.length - 1;
                         addToOperatorArray(cCurrentOperator, iPredecessorIndex, iSuccessorIndex, oParentBracket);
                         cCurrentOperator = 'E';
+                        bNumberAdded = false;
 //                        operatorFound = false;
                     }
                     if (sCurrentNumberString === "") {
@@ -192,7 +207,7 @@ function Calculate(input) {
                     break;
                 default:
                     if (aExpChar[i] === '-') {
-                        if (i == 0 && isNan(aExpChar[i + 1]) === false) {
+                        if (i == 0 && isNaN(aExpChar[i + 1]) === false) {
                             sCurrentNumberString = "" + sCurrentNumberString + aExpChar[i];
                             continue;
                         } else if (i != 0 && isNaN(aExpChar[i - 1]) === true && (isNaN(aExpChar[i + 1]) === false || aExpChar[i + 1] === '(') && aExpChar[i - 1] !== ')') {
@@ -210,6 +225,7 @@ function Calculate(input) {
                         if (sCurrentNumberString !== "") {
                             oTempNumObj = new NumObj(parseFloat(sCurrentNumberString));
                             aNumObjs.push(oTempNumObj);
+                            bNumberAdded = true;
                         }
                         if (bOperatorFound) {
                             if (!bBracketClosed)
@@ -220,6 +236,7 @@ function Calculate(input) {
                             addToOperatorArray(cCurrentOperator, iPredecessorIndex, iSuccessorIndex, oCurrentBracket);
                             cCurrentOperator = 'E';
                             bOperatorFound = false;
+                            bNumberAdded = false;
                         }
                         switch (aExpChar[i]) {
                             case '^':
@@ -267,7 +284,7 @@ function Calculate(input) {
                             iPredecessorIndex = oTempBCache.iStartNumObjIndex;
                             iSuccessorIndex = oTempBCache.iEndNumObjIndex;
 
-                            addToOperatorArray(oTempBCache.cOperator, iPredecessorIndex, iSuccessorIndex, oCurrentBracket);
+                            addToOperatorArray(oTempBCache.cOperator, iPredecessorIndex, iSuccessorIndex, oCurrentBracket); //TODO : bNumberAdded = false ?
                             iPredecessorIndex = oTempBCache.iEndNumObjIndex;
                             if (i + 1 < aExpChar.length) {
                                 if (isNaN(aExpChar[i + 1]) === false || aExpChar[i + 1] === '(') {
@@ -317,7 +334,7 @@ function Calculate(input) {
                 break;
             case '-':
                 var oTempNumObj = aNumObjs[iSuccessorIndex];
-                oTempNumObj.isNegative = true;
+                oTempNumObj.bIsNegative = true;
                 oTempOpArray = new OperatorArray('-', iPredecessorIndex, iSuccessorIndex);
                 oCurrentBracket.aSubOperatorArray.push(oTempOpArray);
                 break;
