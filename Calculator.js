@@ -53,7 +53,7 @@ function Calculate(input) {
     
     var analyseAndCalculate = function() {
         var i = 0;
-        var iPredecessorIndex = null, iSuccessorIndex = null;
+        var iPredecessorIndex = 0, iSuccessorIndex;
         var iCurrentParent = -1;
         var aExpChar = sInput.split("");
         var cCurrentOperator = 'E'; // E = Empty

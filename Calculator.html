@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="./Calculator.js"></script>
-</head>
-<body>
-    <h2>String Calculator</h2>
-    <p>Please input an equation</p>
-    <input id="string">
-    <button type="button" onclick="myFunction()">Submit</button>
-    <p id="result"></p>
-    <script>
-        function myFunction() {
+    <head>
+        <script src="./Calculator.js"></script>
+    </head>
+    <body>
+        <h2>String Calculator</h2>
+        <p>Please input an equation</p>
+        <input id="string" style="width: 50%;margin-bottom: 0.5rem">
+        </br>
+        <button type="button" onclick="myFunction()">Submit</button>
+        <p id="result"></p>
+        <p id="duration"></p>
+        <script>
             var input, result;
-            input = document.getElementById("string").value;
-            result = Calculate(input);
-            document.getElementById("result").innerHTML = result;
-        }
-    </script>
-</body>
+            input = document.getElementById("string");
+            function myFunction() {
+                result = Calculate(input.value);
+                var start = new Date();
+                document.getElementById("result").innerHTML = result;
+                var end = new Date();
+                var duration = end.getTime() - start.getTime();
+                document.getElementById("duration").innerHTML = duration;
+            }
+        </script>
+    </body>
 </html>
