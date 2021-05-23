@@ -1,5 +1,3 @@
-package com.example;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -50,7 +48,7 @@ class BracketOperatorCache {
     int endIntObjIndex;
 }
 //π = 3.1415926535897932
-public class MyMainClass {
+public class Calculator {
 
     static String input = "sin(45)";// "(17860/10786+18670--76830/(6782*3786)/6781+15786*7865+7686/673--478678-878678*575)/((17860/10786+18670--76830/6782*3786/6781+15786*7865+7686/673-(-478678-(878678*575))))";//"(1/2*-(2+3-4)--2-(5*6)*4*(2+(3+4)*(7-8))+7)";////"10/10+20.4+10.1-30/2*5*3/1";//;//
     private static StringBuilder exp;
